@@ -5,15 +5,17 @@ artists <- c("Amaarae", "Baby Tate", "bbno$", "CKay", "Cochise", "Coi Leray",
              "Måneskin", "PinkPantheress", "RealestK", "Saucy Santana",
              "Shygirl", "TisaKorean", "YungManny")
 
-audio_features <- lapply(artists, get_artist_audio_features)
+audio_features_list <- list()
 
-# Add artist name to each data frame in the list
-for (i in seq_along(audio_features)) {
-  audio_features[[i]]$artist_name <- artists[i]
+for (artist in artists) {
+  audio_features <- get_artist_audio_features(artist)
+  if (!is.null(audio_features)) {
+    audio_features$artist_name <- artist
+    audio_features_list[[artist]] <- audio_features
+  }
 }
 
-# Combine list of dataframes into one dataframe
-audiodata <- do.call(rbind, audio_features)
+audio_features_df <- do.call(rbind, audio_features_list)
 
-# save the data frame as a csv file
-write.csv(audiodata, file = here::here("outputs/data/audiodata.csv"), row.names = TRUE)
+# Save combined data frame to RDS file in inputs/data directory
+saveRDS(audio_features_df, file = here::here("inputs/data/all_artists_audio_features.rds"))
