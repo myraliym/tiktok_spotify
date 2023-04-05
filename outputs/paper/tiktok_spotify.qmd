@@ -1,0 +1,25 @@
+
+# graph 1
+explore how many songs the TikTok top 20 emerging artists released before they made it onto the list. This can provide insights into the level of experience and output that these artists had prior to achieving success on the platform.
+
+```{r}
+# Load the audio features data frame
+tracks_per_artist <- read.csv(here::here("outputs/data/tracks_per_artist.csv"))
+
+# Calculate the average track count for 19 artists
+avg_track_count <- mean(tracks_per_artist$track_count)
+
+# Create the bar chart using ggplot2
+ggplot(tracks_per_artist, aes(x = artist_name, y = track_count)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  xlab("Artist") +
+  ylab("Number of Tracks") +
+  ggtitle("Number of Tracks on Spotify by TikTok's Top 20 Artists (excluding Navos) in 2021") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  geom_hline(yintercept = avg_track_count, color = "red", linetype = "dashed") +
+  annotate("text", x = 5, y = avg_track_count + 1, label = paste("Avg. Track Count:", round(avg_track_count, 2)))
+
+```
+
+
+
