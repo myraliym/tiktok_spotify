@@ -1,4 +1,5 @@
 library(spotifyr)
+library(dplyr)
 
 # Load the before2021 data frame
 before2021_df <- readRDS(here::here("inputs/data/before2021.rds"))
@@ -6,26 +7,27 @@ before2021_df <- readRDS(here::here("inputs/data/before2021.rds"))
 # Get the unique list of artists
 artists <- unique(before2021_df$artist_name)
 
-# Create an empty list to store the most popular track for each artist
-most_popular_tracks <- list()
+# Create an empty list to store the track info data frames
+track_info_list <- list()
 
-# Loop through each artist and get their top track using the Spotify API
-for (artist in artists) {
-  # Get the track IDs for the artist's songs
-  artist_tracks <- before2021_df$track_id[before2021_df$artist_name == artist]
+# Loop through each artist and get their most popular track info using the Spotify API
+for (i in 1:length(artists)) {
+  # Get the most popular track ID for the artist
+  track_id <- most_popular_tracks[[i]]
   
-  # Use the Spotify API to get the audio features for each track
-  audio_features <- get_audio_features(artist_tracks)
+  # Get the track info for the most popular track
+  track_info <- get_track(track_id)
   
-  # Sort the audio features by popularity in descending order
-  audio_features <- audio_features[order(-audio_features$popularity),]
+  # Add the track info to the data frame
+  track_info_df <- data.frame(artist_name = artists[i], track_id = track_id, track_name = track_info$name, 
+                              track_popularity = track_info$popularity)
   
-  # Get the top track for the artist
-  top_track <- audio_features$track_id[1]
-  
-  # Add the top track to the list of most popular tracks
-  most_popular_tracks[[artist]] <- top_track
+  # Add the data frame to the list
+  track_info_list[[i]] <- track_info_df
 }
 
-# Print the list of most popular tracks
-print(most_popular_tracks)
+# Combine all the data frames into one large data frame
+track_info_df <- bind_rows(track_info_list)
+
+# Save the data frame as an RDS file
+saveRDS(track_info_df, file = here::here("inputs/data/spotify_hotsong_info.rds"))
