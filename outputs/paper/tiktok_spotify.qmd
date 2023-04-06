@@ -1,5 +1,46 @@
+---
+title: "Exploring the Performance of 2021 TikTok Emerging Artists on Spotify: An Analysis of Musical Elements and Efforts Towards Success"
+author: Myra Li
+thanks: "Code and data are available at: https://github.com/myraliym/tiktok_spotify.git"
+date: "`r Sys.time()`"
+date-format: "D MMMM YYYY"
+abstract: "This essay investigates the music of TikTok's top 20 emerging artists in 2021, with a focus on analyzing their song production and the popularity of their most successful songs. The report draws on data from the TikTok 2021 Music Report and Spotify API to explore the reasons behind these artists' rise to prominence and their potential for continued success in the industry."
+format: pdf
+number-sections: true
+toc: true
+#bibliography: references.bib
+---
+\newpage
+# Introducation
+This analysis seeks to provide a comprehensive understanding of the performance of 2021 TikTok emerging artists on the Spotify platform. We aim to investigate whether there are any differences in their success between different platforms, and analyze the key elements of their songs using Spotify's audio features. While we cannot replicate the exact path to success for these artists, we aim to identify any patterns in their popularity.
+                   
+To achieve this, we have developed two main research questions:                         
+                  
+1) How much effort did these artists put in before becoming top emerging artists?                   
+(my plan: We will examine factors such as the number and genre of songs they produced.                
+2) What are the key musical elements of their most popular songs?                     
+(my plan: We will utilize linear regression analysis to explore factors such as genre, danceability, and other audio features.     
 
-# graph 1
+# Data
+# Results
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(fig.width=6.5, fig.height=2.8) 
+# loading in relevant libraries
+library(cowplot)
+library(tidyverse)
+library(dplyr, warn.conflicts = FALSE)
+library(tidyr)
+library(data.table)
+library(lubridate)
+library(haven)
+library(ggplot2)
+library(scales)
+```
+
+## graph 1
 explore how many songs the TikTok top 20 emerging artists released before they made it onto the list. This can provide insights into the level of experience and output that these artists had prior to achieving success on the platform.
 
 ```{r}
@@ -20,7 +61,7 @@ ggplot(tracks_per_artist, aes(x = artist_name, y = track_count)) +
   annotate("text", x = 5, y = avg_track_count + 1, label = paste("Avg. Track Count:", round(avg_track_count, 2)))
 
 ```
-# graph 2
+## graph 2
 Analyzing the popularity of the most popular song for each of the top 20 emerging artists in TikTok in 2021
 ```{r}
 # Load the Spotify_hotsong_info data frame
